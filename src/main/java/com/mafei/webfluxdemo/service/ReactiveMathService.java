@@ -1,9 +1,11 @@
 package com.mafei.webfluxdemo.service;
 
+import com.mafei.webfluxdemo.dto.MultiplyRequest;
 import com.mafei.webfluxdemo.dto.Response;
 import com.mafei.webfluxdemo.utils.SleepUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -43,5 +45,15 @@ public class ReactiveMathService {
                             return new Response(i * input);
                         }
                 );
+    }
+
+    public Mono<Response> multiply(Mono<MultiplyRequest> request) {
+        return request
+                .map(
+                        requestData -> {
+                            return requestData.getFirst() * requestData.getSecond();
+                        }
+                )
+                .map(Response::new);
     }
 }

@@ -1,15 +1,13 @@
 package com.mafei.webfluxdemo.controller;
 
+import com.mafei.webfluxdemo.dto.MultiplyRequest;
 import com.mafei.webfluxdemo.dto.Response;
 import com.mafei.webfluxdemo.service.MathService;
 import com.mafei.webfluxdemo.service.ReactiveMathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -41,6 +39,17 @@ public class ReactiveMathController {
     @GetMapping(value = "/table/{input}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Response> multiplicationTableStream(@PathVariable("input") int input) {
         return this.reactiveMathService.multiplicationList(input);
+    }
+
+
+    /*
+    we can obtain the body as a usual way or as a reactive way.
+    reactive way : @RequestBody Mono<MultiplyRequest>
+    usual way : @RequestBody MultiplyRequest
+     */
+    @PostMapping(value = "/multiply")
+    public Mono<Response> multiply(@RequestBody Mono<MultiplyRequest> request) {
+        return this.reactiveMathService.multiply(request);
     }
 
 
