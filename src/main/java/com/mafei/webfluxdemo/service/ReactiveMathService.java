@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,11 +28,12 @@ public class ReactiveMathService {
 
     public Flux<Response> multiplicationList(int input) {
         return Flux.range(1, 10)
-                .doOnNext(
-                        i -> {
-                            SleepUtil.sleepSeconds(1);
-                        }
-                )
+                .delayElements(Duration.ofSeconds(1))
+                /*              .doOnNext(
+                                      i -> {
+                                          SleepUtil.sleepSeconds(1);
+                                      }
+                              )*/
                 .doOnNext(
                         i -> {
                             log.debug("processing : {}", i);
